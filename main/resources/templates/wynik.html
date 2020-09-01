@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
-    <meta charset="UTF-8">
-    <title>test</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    </head>
 <body>
-Zagłosowałeś na kandydata:
-<br>
-<span th:text=${kandydat}>...</span><br>
+<p align="center"> <h2>WYNIKI</h2></p> <br>
+
+<table  class="table table-striped">
+    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
+
+    <tr  th:each="wpis: ${kandydat}">
+        <td th:text="${wpis.id}">Nazwisko</td>
+        <td th:text="${wpis.nazwisko}">Nazwisko</td>
+        <td th:text="${wpis.imie}">Imię</td>
+        <td th:text="${wpis.glosow}">Głosów</td>
+    </tr>
+
+</table>
+<a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>
 </html>

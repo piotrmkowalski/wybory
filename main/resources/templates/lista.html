@@ -9,17 +9,22 @@
 
     </head>
 <body>
-<p align="center"> <h2>Kandydaci w wyborach</h2></p> <br>
+<p align="center"> <h2>Spis wyborców</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></th><th>Zagłosuj !</th><th>kasuj ?</th></tr>
+    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th><th>Login</th><th>Hasło</th><th>Kandyduje</th><th>Głosów</th><th>Wyłonienie</th><th>kasuj ?</th></tr>
 
-    <tr  th:each="wpis: ${kandydat}">
+    <tr  th:each="wpis: ${wyborca}">
+        <td th:text="${wpis.id}">ID</td>
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.imie}">Imię</td>
+        <td th:text="${wpis.login}">Login</td>
+        <td th:text="${wpis.haslo}">Hasło</td>
+        <td th:text="${wpis.kandyduje}">Kandyduje</td>
+        <td th:text="${wpis.glosow}">Głosów</td>
         <td>
-            <a href="#" th:href="@{/glosowanie(id=${wpis.id})}" class="btn btn-primary">
-                <i class="fa fa-trash-o fa-lg"></i>Głosuj</a>
+            <a href="#" th:href="@{/wylon(id=${wpis.id})}" class="btn btn-primary">
+                <i class="fa fa-trash-o fa-lg"></i>Wyłoń</a>
         </td>
         <td>
             <a href="#" th:href="@{/kasuj(id=${wpis.id})}" class="btn btn-danger">
@@ -28,8 +33,7 @@
     </tr>
 
 </table>
-
-DODAWANIE NOWEGO KANDYDATA
+DODAWANIE NOWEGO WYBORCY
 <form action="http://localhost:8080/dodaj">
     <table>
         <tr>
@@ -41,9 +45,19 @@ DODAWANIE NOWEGO KANDYDATA
             <td> <input name="nazwisko"> </td>
         </tr>
         <tr>
+            <td>Podaj login</td>
+            <td> <input name="login"> </td>
+        </tr>
+        <tr>
+            <td>Podaj hasło</td>
+            <td> <input name="haslo"> </td>
+        </tr>
+        <tr>
             <td colspan="2">
                 <input type="submit"></td>
     </table>
 </form>
+<a href="#" th:href="@{/logout}" class="btn">
+    <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
 </body>
 </html>
