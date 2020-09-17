@@ -12,7 +12,7 @@
 <p align="center"> <h2>Spis wyborców</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th><th>Login</th><th>Hasło</th><th>Kandyduje</th><th>Głosów</th><th>Wyłonienie</th><th>kasuj ?</th></tr>
+    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th><th>Login</th><th>Hasło</th><th>Kandyduje</th><th>Głosów1tura</th><th>Głosów2tura</th><th>Wyłonienie</th><th>kasuj ?</th></tr>
 
     <tr  th:each="wpis: ${wyborca}">
         <td th:text="${wpis.id}">ID</td>
@@ -21,7 +21,8 @@
         <td th:text="${wpis.login}">Login</td>
         <td th:text="${wpis.haslo}">Hasło</td>
         <td th:text="${wpis.kandyduje}">Kandyduje</td>
-        <td th:text="${wpis.glosow}">Głosów</td>
+        <td th:text="${wpis.glosow}">Głosów - 1 tura</td>
+        <td th:text="${wpis.glosow2tura}">Głosów - 2 tura</td>
         <td>
             <a href="#" th:href="@{/wylon(id=${wpis.id})}" class="btn btn-primary">
                 <i class="fa fa-trash-o fa-lg"></i>Wyłoń</a>
@@ -49,15 +50,23 @@ DODAWANIE NOWEGO WYBORCY
             <td> <input name="login"> </td>
         </tr>
         <tr>
-            <td>Podaj hasło</td>
-            <td> <input name="haslo"> </td>
-        </tr>
-        <tr>
             <td colspan="2">
                 <input type="submit"></td>
     </table>
 </form>
-<a href="#" th:href="@{/logout}" class="btn">
-    <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
+<div>
+    <a href="#" th:href="@{/zarzadzWybory}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Zarządź wybory</a>
+</div>
+<div>
+    <a href="#" th:href="@{/odwolajWybory}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Odwołaj wybory</a>
+</div>
+<div>
+    <a href="#" th:href="@{/logout}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
+</div>
+
+
 </body>
 </html>

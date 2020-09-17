@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<form action="http://localhost:8080/termin">
+    <table>
+        <tr>
+            <td>Podaj rok - pierwsza tura </td>
+            <td><input name="rok1"></td>
+        </tr>
+        <tr>
+            <td>Podaj miesiąc - pierwsza tura </td>
+            <td><input name="miesiac1"></td>
+        </tr>
+        <tr>
+            <td>Podaj dzień - pierwsza tura </td>
+            <td><input name="dzien1"></td>
+        </tr>
+        <tr>
+            <td>Podaj godzinę - pierwsza tura </td>
+            <td><input name="godzina1"></td>
+        </tr>
+        <tr>
+            <td>Podaj minutę - pierwsza tura </td>
+            <td><input name="minuta1"></td>
+        </tr>
+        <tr>
+            <td>Podaj rok - druga tura </td>
+            <td><input name="rok2"></td>
+        </tr>
+        <tr>
+            <td>Podaj miesiąc - druga tura </td>
+            <td><input name="miesiac2"></td>
+        </tr>
+        <tr>
+            <td>Podaj dzień - druga tura </td>
+            <td><input name="dzien2"></td>
+        </tr>
+        <tr>
+            <td>Podaj godzinę - druga tura </td>
+            <td><input name="godzina2"></td>
+        </tr>
+        <tr>
+            <td>Podaj minutę - druga tura </td>
+            <td><input name="minuta2"></td>
+        </tr>
+        <tr>
+            <td>Trwanie głosowania w obu turach - wpisz od 1 do 1440 minut</td>
+            <td><input name="trwanie"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit"></td>
+    </table>
+</form>
+<a href="#" th:href="@{/lista}" class="btn">
+    <i class="fa fa-trash-o fa-lg"></i>Powróć do listy wyborców</a>
+</body>
+</html>

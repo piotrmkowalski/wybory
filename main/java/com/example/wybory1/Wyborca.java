@@ -16,13 +16,17 @@ public class Wyborca {
     private String haslo;
     private boolean mozeZaglosowac;
     private boolean kandyduje;
+    private boolean kandyduje2tura;
     private Integer glosow;
+    private Integer glosow2tura;
 
     @Transient
     boolean  nowy;
 
     public Wyborca(Integer id, String imie, String nazwisko, String login, String haslo,
-                    boolean mozeZaglosowac, boolean kandyduje, Integer glosow, boolean nowy) {
+                    boolean mozeZaglosowac, boolean kandyduje,
+                   boolean kandyduje2tura,
+                   Integer glosow, Integer glosow2tura, boolean nowy) {
         this.id = id;
         this.imie = imie;
         this.nazwisko = nazwisko;
@@ -30,19 +34,25 @@ public class Wyborca {
         this.haslo = haslo;
         this.mozeZaglosowac = mozeZaglosowac;
         this.kandyduje = kandyduje;
+        this.kandyduje2tura = kandyduje2tura;
         this.glosow = glosow;
+        this.glosow2tura = glosow2tura;
         this.nowy = nowy;
     }
 
     public Wyborca(String imie, String nazwisko, String login, String haslo,
-                   boolean mozeZaglosowac, boolean kandyduje,  Integer glosow, boolean nowy) {
+                   boolean mozeZaglosowac, boolean kandyduje,
+                   boolean kandyduje2tura,
+                   Integer glosow, Integer glosow2tura, boolean nowy) {
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.login = login;
         this.haslo = haslo;
         this.mozeZaglosowac = mozeZaglosowac;
         this.kandyduje = kandyduje;
+        this.kandyduje2tura = kandyduje2tura;
         this.glosow = glosow;
+        this.glosow2tura = glosow2tura;
         this.nowy = nowy;
     }
 
@@ -102,12 +112,28 @@ public class Wyborca {
 
     public void setKandyduje(boolean kandyduje) {this.kandyduje = kandyduje;}
 
+    public boolean isKandyduje2tura() {
+        return kandyduje2tura;
+    }
+
+    public void setKandyduje2tura(boolean kandyduje2tura) {
+        this.kandyduje2tura = kandyduje2tura;
+    }
+
     public Integer getGlosow() {
         return glosow;
     }
 
     public void setGlosow(Integer glosow) {
         this.glosow = glosow;
+    }
+
+    public Integer getGlosow2tura() {
+        return glosow2tura;
+    }
+
+    public void setGlosow2tura(Integer glosow2tura) {
+        this.glosow2tura = glosow2tura;
     }
 
     public boolean isNowy() {
@@ -128,7 +154,9 @@ public class Wyborca {
                 ", haslo='" + haslo + '\'' +
                 ", mozeZaglosowac=" + mozeZaglosowac +
                 ", kandyduje=" + kandyduje +
+                ", kandyduje2tura=" + kandyduje2tura +
                 ", głosów=" + glosow +
+                ", głosów2tura=" + glosow2tura +
                 ", nowy=" + nowy +
                 '}';
     }

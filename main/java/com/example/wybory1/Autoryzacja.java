@@ -34,10 +34,12 @@ public class Autoryzacja extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/glosowanie", "/glosuj", "/dolicz", "/wyniki", "/start2").permitAll()
-                .antMatchers("/lista", "/dodaj", "/kasuj", "/wylon").hasAnyRole("ADMIN")
+                .antMatchers("/", "/glosowanie", "/glosuj", "/dolicz", "/dolicz2tura", "/wyniki",
+                        "/start2", "/zmien_haslo", "/zatwierdz_zmiane_hasla", "/zobacz_frekwencje").permitAll()
+                .antMatchers("/lista", "/dodaj", "/kasuj", "/wylon",
+                        "/zarzadzWybory", "/odwolajWybory", "/termin").hasAnyRole("ADMIN")
                 .anyRequest().hasRole("USER")
-                .and().logout().logoutSuccessUrl("/")
+                .and().logout().logoutSuccessUrl("/start2")
                 .and().formLogin().permitAll()
                 .defaultSuccessUrl("/home");
     }

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+<h2>NIEWŁAŚCIWE PARAMETRY CZASU</h2>
+<p>Miesiąc powinien być z zakresu od 1 do 12.</p>
+<p>Dzień w miesiącu maksymalnie powinien wynosić - w zależności od miesiąca i roku - od 28 do 31.</p>
+<p>Godzina powinna być z zakresu od 0 do 23.</p>
+<p>Minuta powinna być z zakresu od 0 do 59.</p>
+<a href="#" th:href="@{/lista}" class="btn">Powrót do spisu wyborców</a>
+</body>
+</html>

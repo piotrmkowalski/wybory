@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Aktualizuj</title>
+    </head>
+<body>
+
+<form   th:action="@{/dolicz}" th:object="${kandydat}">
+
+    <table>
+        <tr>
+            <td>  </td>
+            <td>  <input type="hidden" name="id" th:field="*{id}"></td>
+        </tr>
+        <tr>
+            <td>Podaj login</td>
+            <td> <input name="login"> </td>
+        </tr>
+        <tr>
+            <td>Podaj hasło</td>
+            <td> <input name="haslo"> </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
