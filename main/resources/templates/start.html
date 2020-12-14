@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
+    <head>
         <meta charset="UTF-8">
-        <title>Title</title>
-
+        <title>Strona startowa</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-</head>
+    </head>
 <body>
-    <div>
+<div>
     <a href="#" th:href="@{/lista}" class="btn btn-primary">
         <i class="fa fa-trash-o fa-lg"></i>Zaloguj jako członek komisji</a>
-    </div>
+</div>
 
-    <div>
-        <a href="#" th:href="@{/glosowanie}" class="btn btn-primary">
-            <i class="fa fa-trash-o fa-lg"></i>Zagłosuj</a>
-    </div>
+<div>
+    <a href="#" th:href="@{/zaglosuj}" class="btn btn-primary">
+        <i class="fa fa-trash-o fa-lg"></i>Zagłosuj</a>
+</div>
 
-    <div>
-        <a href="#" th:href="@{/zmien_haslo}" class="btn btn-primary">
-            <i class="fa fa-trash-o fa-lg"></i>Zmień hasło</a>
-    </div>
+<div>
+    <a href="#" th:href="@{/zmien_haslo}" class="btn btn-primary">
+        <i class="fa fa-trash-o fa-lg"></i>Wpisz login i zmień hasło</a>
+</div>
 
-    <div>
-        <a href="#" th:href="@{/zobacz_frekwencje}" class="btn btn-primary">
-            <i class="fa fa-trash-o fa-lg"></i>Zobacz frekwencję</a>
-    </div>
+<div>
+    <a href="#" th:href="@{/zobacz_frekwencje}" class="btn btn-primary">
+        <i class="fa fa-trash-o fa-lg"></i>Zobacz frekwencję</a>
+</div>
 
-    <div>
-        <a href="#" th:href="@{/wyniki}" class="btn btn-primary">
-            <i class="fa fa-trash-o fa-lg"></i>Zobacz wyniki</a>
-    </div>
+<div>
+    <a href="#" th:href="@{/wynik}" class="btn btn-primary">
+        <i class="fa fa-trash-o fa-lg"></i>Zobacz wyniki</a>
+</div>
 
 </body>
 </html>

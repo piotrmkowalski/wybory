@@ -3,26 +3,36 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
-
+        <title>Wynik wyborów</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     </head>
 <body>
-<p align="center"> <h2>WYNIKI PIERWSZEJ I DRUGIEJ TURY WYBORÓW TURY WYBORÓW</h2></p> <br>
+<p align="center"> <h2>WYNIKI PIERWSZEJ TURY WYBORÓW</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów1tura</th><th>Głosów2tura</th></tr>
+    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
 
     <tr th:each="wpis: ${kandydat}">
-        <td th:text="${wpis.id}">Nazwisko</td>
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.imie}">Imię</td>
-        <td th:text="${wpis.glosow}">Głosów1tura</td>
-        <td th:text="${wpis.glosow2tura}">Głosów2tura</td>
+        <td th:text="${wpis.glosow}">Głosów</td>
     </tr>
 
 </table>
+
+<p align="center"> <h2>WYNIKI DRUGIEJ TURY WYBORÓW</h2></p> <br>
+
+<table class="table table-striped">
+    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
+
+    <tr th:each="wpis: ${kandydat2tura}">
+        <td th:text="${wpis.nazwisko}">Nazwisko</td>
+        <td th:text="${wpis.imie}">Imię</td>
+        <td th:text="${wpis.glosow2tura}">Głosów</td>
+    </tr>
+
+</table>
+
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>
 </html>

@@ -3,23 +3,26 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Wynik pierwszej tury</title>
+        <title>Karta wyborcza</title>
+
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
     </head>
 <body>
-<p align="center"> <h2>WYNIKI PIERWSZEJ TURY WYBORÓW</h2></p> <br>
+<p align="center"> <h2>KANDYDACI</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
+    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosowanie</th></tr>
 
-    <tr th:each="wpis: ${kandydat}">
+    <tr  th:each="wpis: ${kandydat}">
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.imie}">Imię</td>
-        <td th:text="${wpis.glosow}">Głosów</td>
+        <td>
+            <a href="#" th:href="@{/przekieruj_glosuj(id=${wpis.id})}" class="btn btn-primary">
+                <i class="fa fa-trash-o fa-lg"></i>Głosuj</a>
+        </td>
     </tr>
-
 </table>
-
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>
 </html>

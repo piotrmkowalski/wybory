@@ -3,23 +3,30 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Głosowanie</title>
+        <title>Brak loginu</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 <body>
-
-<form th:action="@{/dolicz}" th:object="${wyborca}" method="post">
-
+<h2>NIE MA WYBORCY O PODANYM LOGINIE.</h2>
+<form th:action="@{/zatwierdz_zmiane_hasla}" method="post">
     <table>
         <tr>
-            <td>Podaj login </td>
-            <td><input name="login">
-                <input type="hidden" name="id" th:field="*{id}">
+        <tr>
+            <td>Podaj login</td>
+            <td> <input name="login"> </td>
+        </tr>
+            <td>Podaj dotychczasowe hasło</td>
+            <td><input type="password" name="stare_haslo">
+
             </td>
         </tr>
         <tr>
-            <td>Podaj hasło</td>
-            <td><input type="password" name="haslo"></td>
+            <td>Podaj nowe hasło</td>
+            <td> <input type="password" name="nowe_haslo"> </td>
+        </tr>
+        <tr>
+            <td>Powtórz nowe hasło</td>
+            <td> <input type="password" name="nowe_haslo_powtorzone"> </td>
         </tr>
         <tr>
             <td colspan="2">

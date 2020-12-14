@@ -3,21 +3,23 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
-
+        <title>DANE O FREKWENCJI</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     </head>
 <body>
-<table  class="table table-striped">
-    <tr><th>tura</th><th>procent</th></tr>
+<table class="table table-striped">
+    <tr><th>tura</th></th><th>zagłosowało</th><th>uprawnionych</th><th>frekwencja [%]</th></tr>
     <tr>
         <td>pierwsza</td>
-        <td th:text="${frekwencja1tura}">ID</td>
+        <td th:text="${zaglosowalo1tura}"></td>
+        <td th:text="${uprawnionych1tura}"></td>
+        <td th:text="${frekwencja1tura}"></td>
     </tr>
     <tr>
         <td>druga</td>
-        <td th:text="${frekwencja2tura}">ID</td>
+        <td th:text="${zaglosowalo2tura}"></td>
+        <td th:text="${uprawnionych2tura}"></td>
+        <td th:text="${frekwencja2tura}"></td>
     </tr>
 </table>
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>

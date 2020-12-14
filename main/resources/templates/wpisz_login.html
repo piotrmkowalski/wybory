@@ -3,29 +3,20 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Głosowanie</title>
+        <title>Wpisz login</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 <body>
-
-<form th:action="@{/dolicz}" th:object="${wyborca}" method="post">
+<form th:action="@{/przeslij_login}" method="post">
 
     <table>
         <tr>
-            <td>Podaj login </td>
-            <td><input name="login">
-                <input type="hidden" name="id" th:field="*{id}">
-            </td>
-        </tr>
-        <tr>
-            <td>Podaj hasło</td>
-            <td><input type="password" name="haslo"></td>
+            <td>Podaj login</td>
+            <td> <input name="login"> </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit">
-            </td>
-        </tr>
+                <input type="submit"></td>
     </table>
 </form>
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>

@@ -1,34 +1,40 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-    <title>Title</title>
-</head>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Zmiana hasła</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
 <body>
-<form action="http://localhost:8080/zatwierdz_zmiane_hasla" method="GET">
 
+<form th:action="@{/zatwierdz_zmiane_hasla}" method="post">
     <table>
+        <tr>
         <tr>
             <td>Podaj login</td>
             <td> <input name="login"> </td>
         </tr>
-        <tr>
             <td>Podaj dotychczasowe hasło</td>
-            <td> <input name="stare_haslo"> </td>
+            <td><input type="password" name="stare_haslo">
+
+            </td>
         </tr>
         <tr>
             <td>Podaj nowe hasło</td>
-            <td> <input name="nowe_haslo"> </td>
+            <td> <input type="password" name="nowe_haslo"> </td>
         </tr>
         <tr>
             <td>Powtórz nowe hasło</td>
-            <td> <input name="nowe_haslo_powtorzone"> </td>
+            <td> <input type="password" name="nowe_haslo_powtorzone"> </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit"></td>
+                <input type="submit">
+            </td>
+        </tr>
     </table>
 </form>
-
+<a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>
 </html>

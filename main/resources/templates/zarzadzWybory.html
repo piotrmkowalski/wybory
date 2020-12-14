@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Zarządzanie wyborów</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
 <body>
 <form action="http://localhost:8080/termin">
     <table>
@@ -57,7 +58,9 @@
                 <input type="submit"></td>
     </table>
 </form>
+<div>
 <a href="#" th:href="@{/lista}" class="btn">
     <i class="fa fa-trash-o fa-lg"></i>Powróć do listy wyborców</a>
+</div>
 </body>
 </html>

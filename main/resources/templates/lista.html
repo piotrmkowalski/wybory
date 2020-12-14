@@ -3,38 +3,44 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Title</title>
-
+        <title>Zarządzanie listą wyborców</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
     </head>
 <body>
-<p align="center"> <h2>Spis wyborców</h2></p> <br>
+<p align="center"> <h2>SPIS WYBORCÓW</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>ID</th><th>Nazwisko</th><th>Imię</th></th><th>Login</th><th>Hasło</th><th>Kandyduje</th><th>Głosów1tura</th><th>Głosów2tura</th><th>Wyłonienie</th><th>kasuj ?</th></tr>
+    <tr><th>Imię</th><th>Nazwisko</th><th>Login</th><th>Kandyduje</th><th>Wyłonienie</th><th>kasuj ?</th><th>aktualizuj</th></tr>
 
-    <tr  th:each="wpis: ${wyborca}">
-        <td th:text="${wpis.id}">ID</td>
-        <td th:text="${wpis.nazwisko}">Nazwisko</td>
+    <tr th:each="wpis: ${wyborca}">
         <td th:text="${wpis.imie}">Imię</td>
+        <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.login}">Login</td>
-        <td th:text="${wpis.haslo}">Hasło</td>
         <td th:text="${wpis.kandyduje}">Kandyduje</td>
-        <td th:text="${wpis.glosow}">Głosów - 1 tura</td>
-        <td th:text="${wpis.glosow2tura}">Głosów - 2 tura</td>
         <td>
             <a href="#" th:href="@{/wylon(id=${wpis.id})}" class="btn btn-primary">
                 <i class="fa fa-trash-o fa-lg"></i>Wyłoń</a>
         </td>
         <td>
             <a href="#" th:href="@{/kasuj(id=${wpis.id})}" class="btn btn-danger">
-                <i class="fa fa-trash-o fa-lg"></i>Kasuj</a>
+
+                <i class="fa fa-trash-o fa-lg"></i>Kasuj</a></td>
+
+
+        <td>
+            <a href="#" th:href="@{/przekieruj(id=${wpis.id})}" class="btn btn-primary">
+                <i class="fa fa-trash-o fa-lg"></i>Aktualizuj</a>
         </td>
+
     </tr>
 
 </table>
-DODAWANIE NOWEGO WYBORCY
+
+<table class="table table-striped">
+    <tr><td> Wyszukaj osoby wg nazwiska</td><td><form action="http://localhost:8080/wyszukaj"><input name="kryterium"></td><td><input type="submit"></form></td></tr>
+
+</table>
+DODAWANIE NOWEGO UŻYTKOWNIKA
 <form action="http://localhost:8080/dodaj">
     <table>
         <tr>
@@ -46,8 +52,8 @@ DODAWANIE NOWEGO WYBORCY
             <td> <input name="nazwisko"> </td>
         </tr>
         <tr>
-            <td>Podaj login</td>
-            <td> <input name="login"> </td>
+            <td>    Podaj login</td>
+            <td><input name="login"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -66,7 +72,5 @@ DODAWANIE NOWEGO WYBORCY
     <a href="#" th:href="@{/logout}" class="btn">
         <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
 </div>
-
-
 </body>
 </html>

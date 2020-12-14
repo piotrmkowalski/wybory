@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Zarządzanie wyborów - zła kolejność terminów</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+<body>
+<h2>NIESTETY, NIE MOŻNA ZARZĄDZIĆ WYBORÓW.</h2>
+<p>Żeby wybory mogły być zarządzone, następujące chwile czasu muszą następować w następującej kolejności:</p>
+<ol>
+    <li>Chwila "obecna",</li>
+    <li>Początek pierwszej tury wyborów,</li>
+    <li>Koniec pierwszej tury wyborów,</li>
+    <li>Początek drugiej tury wyborów,</li>
+    <li>Koniec drugiej tury wyborów.</li>
+</ol>
+<p>Oprócz tego nowe wybory nie mogą być zarządzone, jeżeli nie ma jeszcze rozstrzygnięcia
+    wcześniej zarządzonych wyborów.</p>
+<p></p>
+<a href="#" th:href="@{/lista}" class="btn">Powrót do spisu wyborców</a>
+</body>
+</html>
