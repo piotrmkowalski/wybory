@@ -2,13 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head lang="pl">
     <meta charset="UTF-8">
-    <title>Widok</title>
+    <title>Błąd dodawania/usuwania</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body style="padding:30px; background-color: lightblue;">
-Dodałeś następujące dane:
-<br>
-<span th:text=${wyborca}>...</span><br>
-<a href="#" th:href="@{/lista}" class="btn">Powrót do listy wyborców</a>
+<h1>NIEPOWODZENIE DODANIA/AKTUALIZACJI DANYCH WYBORCY. POLA: "imię", "nazwiko" ORAZ "login" NIE MOGĄ BYĆ PUSTE.</h1>
+<a href="#" th:href="@{/lista}" class="btn">
+    <i class="fa fa-trash-o fa-lg"></i>Powróć do listy wyborców</a>
+</div>
 </body>
 </html>

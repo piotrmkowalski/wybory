@@ -6,8 +6,22 @@
         <title>Zarządzanie listą wyborców</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
-<body>
-<p align="center"> <h2>SPIS WYBORCÓW</h2></p> <br>
+<body style="padding:30px; background-color: lightblue;">
+<p align="center"> <h2>SPIS WYBORCÓW</h2>
+<span>
+    <a href="#" th:href="@{/zarzadzWybory}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Zarządź wybory</a>
+</span>
+<span>
+    <a href="#" th:href="@{/odwolajWybory}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Odwołaj wybory</a>
+</span>
+<span>
+    <a href="#" th:href="@{/logout}" class="btn">
+        <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
+</span>
+</p>
+<br>
 
 <table  class="table table-striped">
     <tr><th>Imię</th><th>Nazwisko</th><th>Login</th><th>Kandyduje</th><th>Wyłonienie</th><th>kasuj ?</th><th>aktualizuj</th></tr>
@@ -40,7 +54,7 @@
     <tr><td> Wyszukaj osoby wg nazwiska</td><td><form action="http://localhost:8080/wyszukaj"><input name="kryterium"></td><td><input type="submit"></form></td></tr>
 
 </table>
-DODAWANIE NOWEGO UŻYTKOWNIKA
+DODAWANIE NOWEGO WYBORCY
 <form action="http://localhost:8080/dodaj">
     <table>
         <tr>
@@ -60,17 +74,5 @@ DODAWANIE NOWEGO UŻYTKOWNIKA
                 <input type="submit"></td>
     </table>
 </form>
-<div>
-    <a href="#" th:href="@{/zarzadzWybory}" class="btn">
-        <i class="fa fa-trash-o fa-lg"></i>Zarządź wybory</a>
-</div>
-<div>
-    <a href="#" th:href="@{/odwolajWybory}" class="btn">
-        <i class="fa fa-trash-o fa-lg"></i>Odwołaj wybory</a>
-</div>
-<div>
-    <a href="#" th:href="@{/logout}" class="btn">
-        <i class="fa fa-trash-o fa-lg"></i>Wyloguj</a>
-</div>
 </body>
 </html>
