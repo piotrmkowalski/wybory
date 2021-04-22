@@ -19,6 +19,8 @@ public class Wyborca {
     private boolean kandyduje2tura;
     private Integer glosow;
     private Integer glosow2tura;
+    //private String czy_w_drugiej_turze;
+    //private String czy_zwyciezca;
 
     @Transient
     boolean  nowy;
@@ -151,6 +153,8 @@ public class Wyborca {
     public void setNowy(boolean nowy) {
         this.nowy = nowy;
     }
+
+
 
     @Override
     public String toString() {

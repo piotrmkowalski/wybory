@@ -19,6 +19,14 @@
     </tr>
 
 </table>
+ZWYCIĘZCĄ WYBORÓW JEST
+<table  class="table table-striped">
+    <tr><th>Nazwisko</th><th>Imię</th></tr>
+    <tr>
+        <td th:text="${zwyciezca.nazwisko}">Nazwisko</td>
+        <td th:text="${zwyciezca.imie}">Imię</td>
+    </tr>
+</table>
 
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>

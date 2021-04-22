@@ -279,45 +279,36 @@ public class Controler {
      */
     public Wyborca pokazZwyciezce(List<Wyborca> kandydaci, int tura) {
 
-        int max_glosow1 = 0;
-        int max_glosow2 = 0;
-        int id_max1 = 0;
-        int id_max2 = 0;
-        Wyborca zwyciezca = null;
-
         if (tura == 1) { // wybory rozstrzygnięte w pierwszej turze
+            int max_glosow = 0;
+            int id_max = 0;
             for(Wyborca kandydat : kandydaci) {
-                if(kandydat.getGlosow() > max_glosow1) {
-                    max_glosow1 = kandydat.getGlosow();
-                    id_max1 = kandydat.getId();
+                if(kandydat.getGlosow() > max_glosow) {
+                    max_glosow = kandydat.getGlosow();
+                    id_max = kandydat.getId();
                 }
             }
-            zwyciezca = this.znajdz_po_id(id_max1);
+            return this.znajdz_po_id(id_max);
         } else { // wybory rozstrzygnięte w drugiej turze
-            for(Wyborca kandydat : kandydaci) {
-                if(kandydat.getGlosow2tura() > max_glosow1) {
-                    max_glosow1 = kandydat.getGlosow();
-                    id_max1 = kandydat.getId();
-                }
-            }
-            for(Wyborca kandydat : kandydaci) {
-                if(kandydat.getGlosow2tura() > max_glosow2
-                        && kandydat.getId() != id_max1)
-                {
-                    max_glosow2 = kandydat.getGlosow();
-                    id_max2 = kandydat.getId();
-                }
-            }
-            if(max_glosow1 > max_glosow2) {
-                zwyciezca = this.znajdz_po_id(id_max1);
-            } else {
-                if(Math.random() < 0.5)
-                    zwyciezca = this.znajdz_po_id(id_max1);
-                else
-                    zwyciezca = this.znajdz_po_id(id_max2);
+            List<Wyborca> kandydaci2tura = new ArrayList<Wyborca>();
+            for (Wyborca kandydat : kandydaci)
+                if (kandydat.isKandyduje2tura())
+                    kandydaci2tura.add(kandydat);
+
+            Wyborca kandydat1 = kandydaci2tura.get(0);
+            Wyborca kandydat2 = kandydaci2tura.get(1);
+            int glosow_na_kandydata1 = kandydat1.getGlosow2tura();
+            int glosow_na_kandydata2 = kandydat2.getGlosow2tura();
+
+            if (glosow_na_kandydata1 > glosow_na_kandydata2)
+                return kandydat1;
+            else if (glosow_na_kandydata2 > glosow_na_kandydata1)
+                return kandydat2;
+            else {
+                if (Math.random() < 0.5) return kandydat1;
+                else return kandydat2;
             }
         }
-        return zwyciezca;
     }
 
     @RequestMapping ("/")
@@ -669,6 +660,7 @@ public class Controler {
             }
             if (wyborca.isKandyduje2tura() == true) {
                 kandydaci2tura.add(wyborca);
+                System.out.println("w drugiej turze: " + wyborca);
             }
         }
 
@@ -683,20 +675,22 @@ public class Controler {
         } else if (wynik.equals("przed drugą turą")
         || (wynik.equals("podczas drugiej tury"))) {
             System.out.println("Wybory nierozstrzygnięte.");
+            System.out.println("Ilość kandydatów w drugiej turze: " + kandydaci2tura.size());
             model.addAttribute("kandydat", kandydaci);
+            model.addAttribute("kandydaci2tura", kandydaci2tura);
             return "wynik";
         } else if ((wynik.equals("po wyborach") && brak_drugiej_tury == true)) {
             System.out.println("Wybory rozstrzygnięte w pierwszej turze.");
-            //Wyborca zwyciezca = this.pokazZwyciezce(kandydaci, 1);
-            //System.out.println("Zwycięzca wyborów: " + zwyciezca );
-            //model.addAttribute("zwyciezca", zwyciezca);
+            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci, 1);
+            System.out.println("Zwycięzca wyborów: " + zwyciezca );
+            model.addAttribute("zwyciezca", zwyciezca);
             model.addAttribute("kandydat", kandydaci);
             return "wynik1tura";    // wybory są rozstrzygnięte w pierwszej turze
         } else { // wybory są rozstrzygnięte w drugiej turze
             System.out.println("Wybory rozstrzygnięte w drugiej turze.");
-            //Wyborca zwyciezca = this.pokazZwyciezce(kandydaci2tura, 2);
-            //System.out.println("Zwycięzca wyborów: " + zwyciezca );
-            //model.addAttribute("zwyciezca", zwyciezca);
+            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci2tura, 2);
+            System.out.println("Zwycięzca wyborów: " + zwyciezca );
+            model.addAttribute("zwyciezca", zwyciezca);
             model.addAttribute("kandydat", kandydaci);
             model.addAttribute("kandydat2tura", kandydaci2tura);
             return "wynik2tura";
