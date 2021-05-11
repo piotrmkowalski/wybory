@@ -10,23 +10,15 @@
 <p align="center"> <h2>WYNIKI PIERWSZEJ TURY WYBORÓW</h2></p> <br>
 
 <table  class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
+    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th><th>Druga tura</th></tr>
 
     <tr th:each="wpis: ${kandydat}">
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.imie}">Imię</td>
         <td th:text="${wpis.glosow}">Głosów</td>
+        <td th:text="${wpis.czy_w_drugiej_turze}">Druga tura</td>
     </tr>
 
-</table>
-
-DO DRUGIEJ TURY PRZESZLI
-<table  class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></tr>
-    <tr th:each="wpis1: ${kandydaci2tura}">
-        <td th:text="${wpis1.nazwisko}">Nazwisko</td>
-        <td th:text="${wpis1.imie}">Imię</td>
-    </tr>
 </table>
 
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>

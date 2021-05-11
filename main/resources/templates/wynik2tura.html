@@ -23,23 +23,15 @@
 <p align="center"> <h2>WYNIKI DRUGIEJ TURY WYBORÓW</h2></p> <br>
 
 <table class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th></tr>
+    <tr><th>Nazwisko</th><th>Imię</th></th></th><th>Głosów</th><th>Zwycięzca</th></tr>
 
     <tr th:each="wpis: ${kandydat2tura}">
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
         <td th:text="${wpis.imie}">Imię</td>
         <td th:text="${wpis.glosow2tura}">Głosów</td>
+        <td th:text="${wpis.czy_zwyciezca}">Zwycięzca</td>
     </tr>
 
-</table>
-
-ZWYCIĘZCĄ WYBORÓW JEST
-<table  class="table table-striped">
-    <tr><th>Nazwisko</th><th>Imię</th></tr>
-    <tr>
-        <td th:text="${zwyciezca.nazwisko}">Nazwisko</td>
-        <td th:text="${zwyciezca.imie}">Imię</td>
-    </tr>
 </table>
 
 <a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>

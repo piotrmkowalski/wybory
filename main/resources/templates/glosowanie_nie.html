@@ -3,31 +3,23 @@
 <head lang="pl">
     <head>
         <meta charset="UTF-8">
-        <title>Aktualizuj</title>
+        <title>Głosowanie</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
 <body style="padding:30px; background-color: lightblue;">
 
-<form   th:action="@{/aktualizuj}" th:object="${wyborca}" method="post">
+<form th:action="@{/dolicz_nie}" th:object="${wyborca}" method="post">
 
     <table>
         <tr>
-            <td>Podaj imię </td>
-            <td><input name="imie" th:field="*{imie}">
+            <td>Podaj login </td>
+            <td><input name="login">
                 <input type="hidden" name="id" th:field="*{id}">
             </td>
         </tr>
         <tr>
-            <td>Podaj nazwisko</td>
-            <td> <input name="nazwisko" th:field="*{nazwisko}"> </td>
-        </tr>
-        <tr>
-            <td>Podaj rok urodzenia</td>
-            <td> <input name="rok_urodzenia" th:field="*{rok_urodzenia}" type="number"> </td>
-        </tr>
-        <tr>
-            <td>    Podaj login</td>
-            <td><input name="login" th:field="*{login}"></td>
+            <td>Podaj hasło</td>
+            <td><input type="password" name="haslo"></td>
         </tr>
         <tr>
             <td colspan="2">
@@ -36,8 +28,6 @@
         </tr>
     </table>
 </form>
-<a href="#" th:href="@{/lista}" class="btn">
-    <i class="fa fa-trash-o fa-lg"></i>Powróć do listy wyborców</a>
-</div>
+<a href="#" th:href="@{/start2}" class="btn">Przejdź do strony startowej</a>
 </body>
 </html>

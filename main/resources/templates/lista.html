@@ -24,11 +24,12 @@
 <br>
 
 <table  class="table table-striped">
-    <tr><th>Imię</th><th>Nazwisko</th><th>Login</th><th>Kandyduje</th><th>Wyłonienie</th><th>kasuj ?</th><th>aktualizuj</th></tr>
+    <tr><th>Imię</th><th>Nazwisko</th><th>Rok ur.</th><th>Login</th><th>Kandyduje</th><th>Wyłonienie</th><th>kasuj ?</th><th>aktualizuj</th></tr>
 
     <tr th:each="wpis: ${wyborca}">
         <td th:text="${wpis.imie}">Imię</td>
         <td th:text="${wpis.nazwisko}">Nazwisko</td>
+        <td th:text="${wpis.rok_urodzenia}">Rok ur.</td>
         <td th:text="${wpis.login}">Login</td>
         <td th:text="${wpis.kandyduje}">Kandyduje</td>
         <td>
@@ -66,7 +67,11 @@ DODAWANIE NOWEGO WYBORCY
             <td> <input name="nazwisko"> </td>
         </tr>
         <tr>
-            <td>    Podaj login</td>
+            <td>Podaj rok urodzenia</td>
+            <td> <input name="rok_urodzenia" type="number"> </td>
+        </tr>
+        <tr>
+            <td>Podaj login</td>
             <td><input name="login"></td>
         </tr>
         <tr>

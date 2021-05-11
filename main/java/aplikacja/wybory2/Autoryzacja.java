@@ -14,18 +14,18 @@ public class Autoryzacja extends WebSecurityConfigurerAdapter {
     public UserDetailsService userDetailsService() {
 
         UserDetails wyb1 = User.withDefaultPasswordEncoder()
-                .username("wyb1")
-                .password("123")
+                .username("aaa")
+                .password("111")
                 .roles("USER")
                 .build();
         UserDetails wyb2 = User.withDefaultPasswordEncoder()
-                .username("wyb2")
-                .password("123")
+                .username("bbb")
+                .password("111")
                 .roles("ADMIN")
                 .build();
         UserDetails wyb3 = User.withDefaultPasswordEncoder()
-                .username("wyb3")
-                .password("123")
+                .username("ccc")
+                .password("111")
                 .roles("ADMIN", "USER")
                 .build();
         return new InMemoryUserDetailsManager(wyb1, wyb2, wyb3);
@@ -40,8 +40,8 @@ public class Autoryzacja extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/start2", "/przekieruj_glosuj", "/zaglosuj",
-                        "/dolicz", "/zmien_haslo", "/zatwierdz_zmiane_hasla",
+                .antMatchers("/", "/start2", "/przekieruj_glosuj", "/przekieruj_glosuj_nie",
+                        "/zaglosuj", "/dolicz", "/dolicz_nie", "/zmien_haslo", "/zatwierdz_zmiane_hasla",
                         "/zobacz_frekwencje", "/wynik").permitAll()
                 .antMatchers("/lista", "/dodaj", "/kasuj", "/wyszukaj",
                         "/aktualizuj", "/przekieriuj", "wylon", "/zarzadzWybory",

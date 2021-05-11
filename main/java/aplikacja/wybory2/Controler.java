@@ -34,6 +34,10 @@ public class Controler {
     static Double frekwencja1tura = 0.0;
     static Double frekwencja2tura = 0.0;
 
+    static List<Wyborca> lista_wyborcow = new ArrayList<Wyborca>();
+    static List<Wyborca> kandydaci_1tura = new ArrayList<Wyborca>();
+    static List<Wyborca> kandydaci_2tura = new ArrayList<Wyborca>();
+
     @Autowired
     public Controler(WyborcaRepo wyborcaRepo) {
         this.wyborcaRepo = wyborcaRepo;
@@ -60,6 +64,7 @@ public class Controler {
                                                  int rok2, int miesiac2, int dzien2, int godzina2, int minuta2,
                                                  int trwanie)
     {
+        System.out.println("Wszedłęm do wł. param. czasu.");
         if (miesiac1 < 1 || miesiac1 > 12 || miesiac2 < 1 || miesiac2 > 12) {
             System.out.println("if nr 1");
             return false;
@@ -131,7 +136,27 @@ public class Controler {
             mozna_odwolac_wybory = true;
             przyszykowana_druga_tura = false;
             brak_drugiej_tury = false;
-        } else if (teraz.before(koniec1tury)) {
+        } else if(teraz.after(pocz1tury) &&     kandydaci_1tura.size() == 0) {
+            for (Wyborca wyborca : wyborcy) {
+                wyborca.setMozeZaglosowac(true);
+                wyborca.setKandyduje(false);
+                wyborca.setKandyduje2tura(false);
+                wyborca.setCzy_w_drugiej_turze("NIE");
+                wyborca.setCzy_zwyciezca("NIE");
+                wyborca.setGlosow(0);
+                wyborca.setGlosow2tura(0);
+            }
+            this.lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
+            wynik = "brak zarządzonych wyborów";
+            mozna_zarzadzic_wybory = true;
+            mozna_zmieniac_liste_kandydatow = false;
+            trwa_glosowanie = false;
+            mozna_odwolac_wybory = false;
+            przyszykowana_druga_tura = false; // wyborcy mogą zagłosować
+            brak_drugiej_tury = false;
+        }
+        else if (teraz.before(koniec1tury)) {
             mozna_zarzadzic_wybory = false;
             mozna_zmieniac_liste_kandydatow = false;
             trwa_glosowanie = true;
@@ -175,16 +200,33 @@ public class Controler {
                 wyborca.setMozeZaglosowac(true);
                 wyborcaRepo.save(wyborca);
             }
+            lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
+
+            if(kandydaci_1tura.size() == 1) {
+                Wyborca jedyny_kandydat = kandydaci_1tura.get(0);
+
+                int glosow = jedyny_kandydat.getGlosow();
+                if(glosow * 2 <= zaglosowalo1tura)
+                    jedyny_kandydat.setCzy_zwyciezca("NIE");
+                else
+                    jedyny_kandydat.setCzy_zwyciezca("TAK");
+                wyborcaRepo.save(jedyny_kandydat);
+                lista_wyborcow = wyborcaRepo.findAll();
+                Collections.sort(lista_wyborcow);
+                brak_drugiej_tury = true;
+                pocz2tury = null;
+                koniec2tury = null;
+                wynik = "po wyborach";
+            }
+
 
             int suma_glosow = 0;
-            List<Wyborca> kandydaci = new ArrayList<Wyborca>();
-            for(Wyborca wyborca : wyborcy) {
-                if (wyborca.isKandyduje() == true) {
-                    kandydaci.add(wyborca);
-                    suma_glosow += wyborca.getGlosow();
-                }
+            for(Wyborca wyborca : kandydaci_1tura) {
+                suma_glosow += wyborca.getGlosow();
             }
-            kandydaci = this.posegreguj_kandydatow(kandydaci);
+
+            List<Wyborca> kandydaci = this.posegreguj_kandydatow(kandydaci_1tura);
             int max_glosow = kandydaci.get(0).getGlosow();
             if (max_glosow * 2 > suma_glosow) {
                 brak_drugiej_tury = true;
@@ -193,15 +235,26 @@ public class Controler {
                 //System.out.println("Wybory zostały rozstrzygnięte w pierwszej turze.");
                 wynik = "po wyborach";
             } else {
-                kandydaci.get(0).setKandyduje2tura(true);
-                kandydaci.get(1).setKandyduje2tura(true);
-                wyborcaRepo.save(kandydaci.get(0));
-                wyborcaRepo.save(kandydaci.get(1));
-                //System.out.println(kandydaci.get(0));
-                //System.out.println(kandydaci.get(0));
+                Wyborca kandydat0 = kandydaci.get(0);
+                Wyborca kandydat1 = kandydaci.get(1);
+
+                kandydat0.setKandyduje2tura(true);
+                kandydat0.setCzy_w_drugiej_turze("TAK");
+                wyborcaRepo.save(kandydat0);
+
+                kandydat1.setKandyduje2tura(true);
+                kandydat1.setCzy_w_drugiej_turze("TAK");
+                wyborcaRepo.save(kandydat1);
+
+                kandydaci_2tura.clear();    // na wszelki wypadek
+                kandydaci_2tura.add(kandydat0);
+                kandydaci_2tura.add(kandydat1);
+                Collections.sort(kandydaci_2tura);
             }
             przyszykowana_druga_tura = true;
         }
+        lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
         return wynik;
     }
 
@@ -290,13 +343,13 @@ public class Controler {
             }
             return this.znajdz_po_id(id_max);
         } else { // wybory rozstrzygnięte w drugiej turze
-            List<Wyborca> kandydaci2tura = new ArrayList<Wyborca>();
+            /* List<Wyborca> kandydaci2tura = new ArrayList<Wyborca>();
             for (Wyborca kandydat : kandydaci)
                 if (kandydat.isKandyduje2tura())
-                    kandydaci2tura.add(kandydat);
+                    kandydaci2tura.add(kandydat);*/
 
-            Wyborca kandydat1 = kandydaci2tura.get(0);
-            Wyborca kandydat2 = kandydaci2tura.get(1);
+            Wyborca kandydat1 = kandydaci_2tura.get(0);
+            Wyborca kandydat2 = kandydaci_2tura.get(1);
             int glosow_na_kandydata1 = kandydat1.getGlosow2tura();
             int glosow_na_kandydata2 = kandydat2.getGlosow2tura();
 
@@ -320,10 +373,15 @@ public class Controler {
         for (Wyborca wyborca : wyborcy) {
             wyborca.setMozeZaglosowac(true);
             wyborca.setKandyduje(false);
+            wyborca.setKandyduje2tura(false);
             wyborca.setGlosow(0);
             wyborca.setGlosow2tura(0);
+            wyborca.setCzy_w_drugiej_turze("NIE");
+            wyborca.setCzy_zwyciezca("NIE");
             wyborcaRepo.save(wyborca);
         }
+        lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
         return "start";
     }
 
@@ -340,6 +398,7 @@ public class Controler {
     public String dodajemyDane(
             @RequestParam("imie") String imie,
             @RequestParam("nazwisko") String nazwisko,
+            @RequestParam("rok_urodzenia") Integer rok_urodzenia,
             @RequestParam("login") String login,
             Model model)
             throws Exception {
@@ -350,19 +409,40 @@ public class Controler {
             return "widok_blad_dodawania";
         }
 
-        if(imie.trim().isEmpty() || nazwisko.trim().isEmpty() || login.trim().isEmpty())
+        for(Wyborca wyborca: lista_wyborcow) {
+            if (wyborca.getLogin().equals(login)) {
+                return "widok_blad_loginu";
+            }
+        }
+
+        if(imie.trim().isEmpty() || nazwisko.trim().isEmpty() || login.trim().isEmpty()
+                || rok_urodzenia == null)
             return "widok_blad_pusteDane";
 
-        Wyborca wyborca = new Wyborca(imie, nazwisko, login,  "123", true, false,
-                false, 0, 0, true);
+        Date teraz = new Date();
+        Date pelnoletnosc = new GregorianCalendar(rok_urodzenia + 18, 0, 1).getTime();
+        Date dlugowiecznosc = new GregorianCalendar(rok_urodzenia + 123, 0, 1).getTime();
+        if(teraz.before(pelnoletnosc) || teraz.after(dlugowiecznosc))
+            return "widok_blad_daty_urodzenia";
+
+        Wyborca wyborca = new Wyborca(imie, nazwisko, rok_urodzenia, login,  "111", true, false,
+                false, 0, 0, "NIE", "NIE", true);
         wyborcaRepo.save(wyborca);
+
+        this.lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
+
         model.addAttribute("wyborca", wyborca);
         return "Widok";
     }
 
     @RequestMapping("/lista")
     public String lista(Model model) {
-        model.addAttribute("wyborca", wyborcaRepo.findAll());
+        this.lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
+
+        //model.addAttribute("wyborca", wyborcaRepo.findAll());
+        model.addAttribute("wyborca", lista_wyborcow);
         return "lista";
     }
 
@@ -374,7 +454,12 @@ public class Controler {
             return "widok_blad_dodawania";
         }
         wyborcaRepo.deleteById(id);
-        model.addAttribute("wyborca", wyborcaRepo.findAll());
+
+        this.lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
+
+        //model.addAttribute("wyborca", wyborcaRepo.findAll());
+        model.addAttribute("wyborca", lista_wyborcow);
         return "lista";
     }
 
@@ -389,24 +474,45 @@ public class Controler {
             @RequestParam("id") Integer id,
             @RequestParam("imie") String imie,
             @RequestParam("nazwisko") String nazwisko,
+            @RequestParam("rok_urodzenia") Integer rok_urodzenia,
             @RequestParam("login") String login,
             Model model)
             throws Exception {
 
-        if(imie.trim().isEmpty() || nazwisko.trim().isEmpty() || login.trim().isEmpty())
+        if(imie.trim().isEmpty() || nazwisko.trim().isEmpty() || login.trim().isEmpty()
+             || rok_urodzenia == null)
             return "widok_blad_pusteDane";
 
+        // wyborca nie może mieć zmienionego loginu na taki, który ma już inny wyborca
+        for(Wyborca wyborca: lista_wyborcow) {
+            if (wyborca.getLogin().equals(login) && !wyborca.getId().equals(id)) {
+                return "widok_blad_loginu";
+            }
+        }
+
+        Date teraz = new Date();
+        Date pelnoletnosc = new GregorianCalendar(rok_urodzenia + 18, 0, 1).getTime();
+        Date dlugowiecznosc = new GregorianCalendar(rok_urodzenia + 123, 0, 1).getTime();
+        if(teraz.before(pelnoletnosc) || teraz.after(dlugowiecznosc))
+            return "widok_blad_daty_urodzenia";
+
         Wyborca wyborca_zmieniany = this.znajdz_po_id(id);
-        Wyborca wyborca = new Wyborca(id, imie, nazwisko, login,
+        Wyborca wyborca = new Wyborca(id, imie, nazwisko, rok_urodzenia, login,
                 wyborca_zmieniany.getHaslo(),
                 wyborca_zmieniany.isMozeZaglosowac(),
                 wyborca_zmieniany.isKandyduje(),
                 wyborca_zmieniany.isKandyduje2tura(),
                 wyborca_zmieniany.getGlosow(),
                 wyborca_zmieniany.getGlosow2tura(),
+                wyborca_zmieniany.getCzy_w_drugiej_turze(),
+                wyborca_zmieniany.getCzy_zwyciezca(),
                 true); // true -> że nowy
 
         wyborcaRepo.save(wyborca);
+
+        this.lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
+
         model.addAttribute("wyborca", wyborca);
         return "Widok";
     }
@@ -428,50 +534,45 @@ public class Controler {
         return "glosowanie";
     }
 
+    @RequestMapping("/przekieruj_glosuj_nie")
+    public String przekieruj_glosuj_nie(@RequestParam("id") Integer id, Model model)
+            throws Exception
+    {
+        model.addAttribute("wyborca", wyborcaRepo.findById(id));
+        return "glosowanie_nie";
+    }
+
     @RequestMapping("/wylon")
     public String wylon(@RequestParam("id") Integer id, Model model){
         // wyłaniać kandydatów można dopiero po zarządzeniu wyborów,
         // ale przed ich rozpoczęciem
         this.skontrolujCzas();
         if(mozna_zmieniac_liste_kandydatow) {
-            List<Wyborca> listaWyborcow = wyborcaRepo.findAll();
             Wyborca wyborca = this.znajdz_po_id(id);
+
+            Date teraz = new Date();
+            Date wiek_con_35lat = new GregorianCalendar(wyborca.getRok_urodzenia() + 35, 0, 1).getTime();
+            if(teraz.before(wiek_con_35lat))
+                return "blad_wyborca_za_mlody_na_kandydowanie";
+
             boolean czyKandyduje = wyborca.isKandyduje();
             wyborca.setKandyduje(!czyKandyduje);
             wyborcaRepo.save(wyborca);
-            model.addAttribute("wyborca", wyborcaRepo.findAll());
+            aktualizuj_liste_kandydatow();
+            model.addAttribute("wyborca", lista_wyborcow);  // wyborcaRepo.findAll()
             return "lista";
         } else {
             return "blad_wylanianiaKandydata";
         }
     }
 
-    /**
-     *
-     * @param kandydaci lista kandydatów
-     * @return posortowana alfabetycznie wg nazwisk lista kandydatów
-     */
-    List<Wyborca> posortuj_kandydatow_nazwiskami(List<Wyborca> kandydaci) {
-
-        List<String> nazwiska = new ArrayList<String>();
-        List<Wyborca> posortowani = new ArrayList<Wyborca>();
-
-        for(Wyborca kandydat : kandydaci)
-            nazwiska.add(kandydat.getNazwisko());
-
-        Collections.sort(nazwiska);
-        Collections.reverse(nazwiska);  // odwrócenie kolejności nazwisk
-
-        for (String nazwisko : nazwiska) {
-            for (Wyborca kandydat : kandydaci) {
-                if (kandydat.getNazwisko().equals(nazwisko)) {
-                    posortowani.add(kandydat);
-                    break;
-                }
-            }
+    private static void aktualizuj_liste_kandydatow(){
+        kandydaci_1tura.clear();
+        for(Wyborca wyborca : lista_wyborcow) {
+            if(wyborca.isKandyduje() == true)
+                kandydaci_1tura.add(wyborca);
         }
-
-        return posortowani;
+        Collections.sort(kandydaci_1tura);
     }
 
     @RequestMapping("/zaglosuj")
@@ -482,13 +583,11 @@ public class Controler {
         List<Wyborca> kandydaci = new ArrayList<Wyborca>();
 
         if (wynik.equals("podczas pierwszej tury")) {
-            for(Wyborca wyborca : wyborcy) {
-                if (wyborca.isKandyduje() == true) {
-                    kandydaci.add(wyborca);
-                }
+            if(kandydaci_1tura.size() == 1) {
+                model.addAttribute("jedyny_kandydat", kandydaci_1tura.get(0));
+                return "karta_wyborcza_jedyny_kandydat";
             }
-            kandydaci = this.posortuj_kandydatow_nazwiskami(kandydaci);
-            model.addAttribute("kandydat", kandydaci);
+            model.addAttribute("kandydat", kandydaci_1tura);
             return "karta_wyborcza";
         }
         else if (wynik.equals("podczas drugiej tury")) {
@@ -512,6 +611,57 @@ public class Controler {
         else {
             return "glosowanie_blad_glosowanieNieTrwa";
         }
+    }
+
+    /**
+     * Metoda ma na celu doliczenie głosu przeciwko kandydatowi
+     * w przypadku, gdy jest on jedynym kandydatem.
+     *
+     * @param id
+     * @param login
+     * @param haslo
+     * @param model
+     * @return
+     */
+    @PostMapping("/dolicz_nie")
+    public String dolicz_nie(@RequestParam("id") Integer id,
+                         @RequestParam("login") String login,
+                         @RequestParam("haslo") String haslo,
+                         Model model){
+
+        String wynik = this.skontrolujCzas();
+        if(     wynik.equals("brak zarządzonych wyborów")
+                ||  wynik.equals("przed pierwszą turą")
+                ||  wynik.equals("przed drugą turą")
+                ||  wynik.equals("po wyborach")
+        ) {
+            return "glosowanie_blad_glosowanieNieTrwa";
+        }
+
+        List<Wyborca> listaWyborcow = wyborcaRepo.findAll();
+
+        for(Wyborca wyborca : listaWyborcow) {
+            if(wyborca.getLogin().equals(login)) {
+                if(!wyborca.getHaslo().equals(haslo)) {
+                    model.addAttribute("wyborca", wyborcaRepo.findById(id));
+                    return "glosowanie_blad_zleHaslo";
+                }
+                else if (wyborca.isMozeZaglosowac() == false) {
+                    model.addAttribute("wyborca", wyborcaRepo.findById(id));
+                    return "glosowanie_blad_ponowneGlosowanie";
+                } else {
+                    uprawnionych1tura = listaWyborcow.size();
+                    zaglosowalo1tura++;
+                    wyborca.setMozeZaglosowac(false); // wyborca już zagłosował
+                    wyborcaRepo.save(wyborca);
+                    lista_wyborcow = wyborcaRepo.findAll();
+                    Collections.sort(lista_wyborcow);
+                    return "glosowanie_nie_glos_zostal_oddany";
+                }
+            }
+        }
+        model.addAttribute("wyborca", wyborcaRepo.findById(id));
+        return "glosowanie_blad_brakLoginu";
     }
 
     @PostMapping("/dolicz")
@@ -549,18 +699,27 @@ public class Controler {
                         zaglosowalo1tura++;
                         Integer iloscGlosow = kandydat.getGlosow();
                         kandydat.setGlosow(++iloscGlosow);
+
+                        wyborca.setMozeZaglosowac(false); // wyborca już zagłosował
+                        wyborcaRepo.save(wyborca);
+                        lista_wyborcow = wyborcaRepo.findAll();
+                        Collections.sort(lista_wyborcow);
                     } else if (wynik.equals("podczas drugiej tury")) {
                         uprawnionych2tura = listaWyborcow.size();
                         zaglosowalo2tura++;
                         Integer iloscGlosow = kandydat.getGlosow2tura();
                         kandydat.setGlosow2tura(++iloscGlosow);
-                    }
-                    wyborcaRepo.save(kandydat);
 
-                    // ustawienie informacji w bazie danych, że wyborca już zagłosował
+                        wyborca.setMozeZaglosowac(false); // wyborca już zagłosował
+                        wyborcaRepo.save(wyborca);
+                        lista_wyborcow = wyborcaRepo.findAll();
+                        Collections.sort(lista_wyborcow);
+                    }
+                    /*// ustawienie informacji w bazie danych, że wyborca już zagłosował
                     wyborca.setMozeZaglosowac(false);
                     wyborcaRepo.save(wyborca);
-
+                    lista_wyborcow = wyborcaRepo.findAll();
+                    Collections.sort(lista_wyborcow); */
                     return "glosowanie_glos_zostal_oddany";
                 }
             }
@@ -590,6 +749,8 @@ public class Controler {
                 } else if (nowe_haslo.equals(nowe_haslo_powtorzone)) {
                     wyborca.setHaslo(nowe_haslo);
                     wyborcaRepo.save(wyborca);
+                    lista_wyborcow = wyborcaRepo.findAll();
+                    Collections.sort(lista_wyborcow);
                     return "zmien_haslo_haslo_zostalo_zmienione";
                 } else {
                     return "zmien_haslo_blad_noweHaslaRozne";
@@ -621,7 +782,7 @@ public class Controler {
             }
             zaglosowalo1tura = zaglosowalo;
             uprawnionych1tura = uprawnionych;
-            frekwencja1tura = (double)zaglosowalo * 100 / (double)uprawnionych;
+            frekwencja1tura = (double)zaglosowalo1tura * 100 / (double)uprawnionych1tura;
             /*zaglosowalo2tura = 0;
             uprawnionych2tura = 0;
             frekwencja2tura = 0.0;*/
@@ -637,7 +798,7 @@ public class Controler {
             }
             zaglosowalo2tura = zaglosowalo;
             uprawnionych2tura = uprawnionych;
-            frekwencja2tura = (double)zaglosowalo * 100 / (double)uprawnionych;
+            frekwencja2tura = (double)zaglosowalo2tura * 100 / (double)uprawnionych2tura;
         }
         model.addAttribute("zaglosowalo1tura"   , zaglosowalo1tura);
         model.addAttribute("zaglosowalo2tura"   , zaglosowalo2tura);
@@ -651,18 +812,21 @@ public class Controler {
     @RequestMapping("/wynik")
     public String wynik( Model model){
 
-        List<Wyborca> wyborcy = wyborcaRepo.findAll();
-        List<Wyborca> kandydaci = new ArrayList<>();
+    /*        List<Wyborca> wyborcy = wyborcaRepo.findAll();
+        List<Wyborca> kandydaci1tura = new ArrayList<>();
         List<Wyborca> kandydaci2tura = new ArrayList<>();
         for(Wyborca wyborca : wyborcy) {
             if (wyborca.isKandyduje() == true) {
-                kandydaci.add(wyborca);
+                kandydaci1tura.add(wyborca);
             }
             if (wyborca.isKandyduje2tura() == true) {
                 kandydaci2tura.add(wyborca);
-                System.out.println("w drugiej turze: " + wyborca);
             }
         }
+        kandydaci_1tura = kandydaci1tura;
+        kandydaci_2tura = kandydaci2tura;
+        Collections.sort(kandydaci_1tura);
+        Collections.sort(kandydaci_2tura);*/
 
         // zobaczyć można po pierwszej turze wyborów.
         String wynik = this.skontrolujCzas();
@@ -674,25 +838,33 @@ public class Controler {
             return "wynik_blad_brakWyniku";
         } else if (wynik.equals("przed drugą turą")
         || (wynik.equals("podczas drugiej tury"))) {
-            System.out.println("Wybory nierozstrzygnięte.");
-            System.out.println("Ilość kandydatów w drugiej turze: " + kandydaci2tura.size());
-            model.addAttribute("kandydat", kandydaci);
-            model.addAttribute("kandydaci2tura", kandydaci2tura);
+            model.addAttribute("kandydat", kandydaci_1tura);
             return "wynik";
-        } else if ((wynik.equals("po wyborach") && brak_drugiej_tury == true)) {
-            System.out.println("Wybory rozstrzygnięte w pierwszej turze.");
-            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci, 1);
+        } else if ((wynik.equals("po wyborach") && kandydaci_1tura.size() == 1)) {
+            Wyborca jedyny_kandydat = kandydaci_1tura.get(0);
+            int glosow_nie = zaglosowalo1tura - jedyny_kandydat.getGlosow();
+            model.addAttribute("glosow_nie", glosow_nie);
+            model.addAttribute("jedyny_kandydat", jedyny_kandydat);
+            return "wynik_1kandydat";
+        }
+        else if ((wynik.equals("po wyborach") && brak_drugiej_tury == true)) {
+            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci_1tura, 1);
+            zwyciezca.setCzy_zwyciezca("TAK");
+            wyborcaRepo.save(zwyciezca);
+            lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
             System.out.println("Zwycięzca wyborów: " + zwyciezca );
-            model.addAttribute("zwyciezca", zwyciezca);
-            model.addAttribute("kandydat", kandydaci);
+            model.addAttribute("kandydat", kandydaci_1tura);
             return "wynik1tura";    // wybory są rozstrzygnięte w pierwszej turze
         } else { // wybory są rozstrzygnięte w drugiej turze
-            System.out.println("Wybory rozstrzygnięte w drugiej turze.");
-            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci2tura, 2);
+            Wyborca zwyciezca = this.pokazZwyciezce(kandydaci_2tura, 2);
+            zwyciezca.setCzy_zwyciezca("TAK");
+            wyborcaRepo.save(zwyciezca);
+            lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
             System.out.println("Zwycięzca wyborów: " + zwyciezca );
-            model.addAttribute("zwyciezca", zwyciezca);
-            model.addAttribute("kandydat", kandydaci);
-            model.addAttribute("kandydat2tura", kandydaci2tura);
+            model.addAttribute("kandydat", kandydaci_1tura);
+            model.addAttribute("kandydat2tura", kandydaci_2tura);
             return "wynik2tura";
         }
 
@@ -709,6 +881,10 @@ public class Controler {
                 wyborca.setMozeZaglosowac(true);
                 wyborca.setGlosow(0);
                 wyborca.setGlosow2tura(0);
+                wyborca.setKandyduje(false);
+                wyborca.setKandyduje2tura(false);
+                wyborca.setCzy_w_drugiej_turze("NIE");
+                wyborca.setCzy_zwyciezca("NIE");
                 wyborcaRepo.save(wyborca);
             }
             zaglosowalo1tura = 0;
@@ -717,6 +893,11 @@ public class Controler {
             uprawnionych2tura = 0;
             frekwencja1tura = 0.0;
             frekwencja2tura = 0.0;
+
+            kandydaci_1tura.clear();
+            kandydaci_2tura.clear();
+            lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
             return "zarzadzWybory";
         } else {
             return "zarzadzWybory_blad_zarzadzaniaWyborow";
@@ -739,7 +920,8 @@ public class Controler {
                          Model model){
 
         // sprawdzenie, czy wartości mogą dać sensowną datę
-        if (this.wlasciweParametryCzasu(rok1, miesiac1, dzien1, godzina1, minuta1,
+        System.out.println("Wewnątrz funkcji termin.");
+        if(this.wlasciweParametryCzasu(rok1, miesiac1, dzien1, godzina1, minuta1,
                 rok2, miesiac2, dzien2, godzina2, minuta2,
                 trwanie) == false)
         {
@@ -766,9 +948,15 @@ public class Controler {
                 wyborca.setKandyduje2tura(false);
                 wyborca.setGlosow(0);
                 wyborca.setGlosow2tura(0);
+                wyborca.setCzy_w_drugiej_turze("NIE");
+                wyborca.setCzy_zwyciezca("NIE");
                 wyborcaRepo.save(wyborca);
             }
-            model.addAttribute("wyborca", wyborcaRepo.findAll());
+            kandydaci_1tura.clear();
+            kandydaci_2tura.clear();
+            lista_wyborcow = wyborcaRepo.findAll();
+            Collections.sort(lista_wyborcow);
+            model.addAttribute("wyborca", lista_wyborcow);
             return "lista";
         }
         else    // jeżeli kolejność terminów jest zła, to następuje ich anulowanie
@@ -802,10 +990,15 @@ public class Controler {
             wyborca.setKandyduje2tura(false);
             wyborca.setGlosow(0);
             wyborca.setGlosow2tura(0);
+            wyborca.setCzy_w_drugiej_turze("NIE");
+            wyborca.setCzy_zwyciezca("NIE");
             wyborcaRepo.save(wyborca);
         }
-
-        model.addAttribute("wyborca", wyborcy);
+        kandydaci_1tura.clear();
+        kandydaci_2tura.clear();
+        lista_wyborcow = wyborcaRepo.findAll();
+        Collections.sort(lista_wyborcow);
+        model.addAttribute("wyborca", lista_wyborcow);
         return "lista";
     }
 

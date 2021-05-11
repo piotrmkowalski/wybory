@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="Wyborca")
-public class Wyborca {
+public class Wyborca implements Comparable<Wyborca> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,6 +12,7 @@ public class Wyborca {
     private String imie;
     @Column(name = "nazwisko", nullable = false, length = 128)
     private String nazwisko;
+    private Integer rok_urodzenia;
     private String login;
     private String haslo;
     private boolean mozeZaglosowac;
@@ -19,8 +20,8 @@ public class Wyborca {
     private boolean kandyduje2tura;
     private Integer glosow;
     private Integer glosow2tura;
-    //private String czy_w_drugiej_turze;
-    //private String czy_zwyciezca;
+    private String czy_w_drugiej_turze;
+    private String czy_zwyciezca;
 
     @Transient
     boolean  nowy;
@@ -33,13 +34,14 @@ public class Wyborca {
     private Firma firma;
     */
 
-    public Wyborca(Integer id, String imie, String nazwisko, String login, String haslo,
-                   boolean mozeZaglosowac, boolean kandyduje,
-                   boolean kandyduje2tura,
-                   Integer glosow, Integer glosow2tura, boolean nowy) {
+    public Wyborca(Integer id, String imie, String nazwisko, Integer rok_urodzenia, String login, String haslo,
+                   boolean mozeZaglosowac, boolean kandyduje, boolean kandyduje2tura,
+                   Integer glosow, Integer glosow2tura,
+                   String czy_w_drugiej_turze, String czy_zwyciezca, boolean nowy) {
         this.id = id;
         this.imie = imie;
         this.nazwisko = nazwisko;
+        this.rok_urodzenia = rok_urodzenia;
         this.login = login;
         this.haslo = haslo;
         this.mozeZaglosowac = mozeZaglosowac;
@@ -47,15 +49,18 @@ public class Wyborca {
         this.kandyduje2tura = kandyduje2tura;
         this.glosow = glosow;
         this.glosow2tura = glosow2tura;
+        this.czy_w_drugiej_turze = czy_w_drugiej_turze;
+        this.czy_zwyciezca = czy_zwyciezca;
         this.nowy = nowy;
     }
 
-    public Wyborca(String imie, String nazwisko, String login, String haslo,
-                   boolean mozeZaglosowac, boolean kandyduje,
-                   boolean kandyduje2tura,
-                   Integer glosow, Integer glosow2tura, boolean nowy) {
+    public Wyborca(String imie, String nazwisko, Integer rok_urodzenia, String login, String haslo,
+                   boolean mozeZaglosowac, boolean kandyduje, boolean kandyduje2tura,
+                   Integer glosow, Integer glosow2tura,
+                   String czy_w_drugiej_turze, String czy_zwyciezca, boolean nowy) {
         this.imie = imie;
         this.nazwisko = nazwisko;
+        this.rok_urodzenia = rok_urodzenia;
         this.login = login;
         this.haslo = haslo;
         this.mozeZaglosowac = mozeZaglosowac;
@@ -63,10 +68,28 @@ public class Wyborca {
         this.kandyduje2tura = kandyduje2tura;
         this.glosow = glosow;
         this.glosow2tura = glosow2tura;
+        this.czy_w_drugiej_turze = czy_w_drugiej_turze;
+        this.czy_zwyciezca = czy_zwyciezca;
         this.nowy = nowy;
     }
 
     public Wyborca(){}
+
+    public String getCzy_w_drugiej_turze() {
+        return czy_w_drugiej_turze;
+    }
+
+    public void setCzy_w_drugiej_turze(String czy_w_drugiej_turze) {
+        this.czy_w_drugiej_turze = czy_w_drugiej_turze;
+    }
+
+    public String getCzy_zwyciezca() {
+        return czy_zwyciezca;
+    }
+
+    public void setCzy_zwyciezca(String czy_zwyciezca) {
+        this.czy_zwyciezca = czy_zwyciezca;
+    }
 
     public Integer getId() {
         return id;
@@ -90,6 +113,14 @@ public class Wyborca {
 
     public void setNazwisko(String nazwisko) {
         this.nazwisko = nazwisko;
+    }
+
+    public Integer getRok_urodzenia() {
+        return rok_urodzenia;
+    }
+
+    public void setRok_urodzenia(Integer rok_urodzenia) {
+        this.rok_urodzenia = rok_urodzenia;
     }
 
     public String getLogin() {
@@ -162,6 +193,7 @@ public class Wyborca {
                 "id=" + id +
                 ", imie='" + imie + '\'' +
                 ", nazwisko='" + nazwisko + '\'' +
+                ", rok_urodzenia='" + rok_urodzenia + '\'' +
                 ", login='" + login + '\'' +
                 ", haslo='" + haslo + '\'' +
                 ", mozeZaglosowac=" + mozeZaglosowac +
@@ -169,8 +201,19 @@ public class Wyborca {
                 ", kandyduje2tura=" + kandyduje2tura +
                 ", głosów=" + glosow +
                 ", głosów2tura=" + glosow2tura +
+                ", czy_w_drugiej_turze=" + czy_w_drugiej_turze +
+                ", czy_w_drugiej_turze=" + czy_zwyciezca +
                 ", nowy=" + nowy +
                 '}';
     }
 
+    @Override
+    public int compareTo(Wyborca o) {
+        int porownanie_nazwisk = this.nazwisko.compareTo(o.nazwisko);
+        int porownanie_imion = this.imie.compareTo(o.imie);
+        if(porownanie_nazwisk != 0)
+            return porownanie_nazwisk;
+        else
+            return porownanie_imion;
+    }
 }
